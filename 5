@@ -1,0 +1,32 @@
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data=pd.read_csv("advertising.csv")
+data.head(10)
+data.isna().sum()
+data.duplicated().any()
+data.shape
+
+fig, axs=plt.subplots(3,figsize=(5,5))
+plt1=sns.boxplot(data['TV'],ax=axs[0])
+plt2=sns.boxplot(data['Newspaper'],ax=axs[1])
+plt3=sns.boxplot(data['Radio'],ax=axs[2])
+sns.distplot(data['Sales']);
+
+sns.heatmap(data.corr(),annot=True)
+plt.show()
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+x=data[['TV']]
+y=data['Sales']
+x_train,x_test,y_train,y_test=train_test_split(x,y, test_size=0.3,random_state=100)
+slr=LinearRegression()
+slr.fit(x_train,y_train)
+print("intercept",slr.intercept_ )
+print("coefficent",slr.coef_)
+print("regression equation : Sales={:.3f}+{:.3f}*TV".format(slr.intercept_,slr.coef_[0]))
+print("R square accuracy of the model:{:.2f}".format(slr.score(x,y)*100))
